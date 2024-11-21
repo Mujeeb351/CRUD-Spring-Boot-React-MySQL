@@ -1,70 +1,72 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AddUsers() {
+  let navigate = useNavigate();
 
-  const [value,setValue] = ({
-    name:"",
-    username:"",
-    email:""
-  })
+  const [user, setUser] = useState({
+    name: "",
+    username: "",
+    email: "",
+  });
 
-  const {name,username,email} = value
+  const { name, username, email } = user;
 
-  const handleChange = (e)=>{
-    setValue({...value,[e.target.name]:e.target.vale})
-  }
+  const onSubmitChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
 
-
-
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await axios.post("http://localhost:8090/api/user", user);
+    navigate("/");
+  };
 
   return (
     <div className="container">
       <div className="row">
         <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
-          <h2 className="text-center m-4">User Registration</h2>
+          <h2 className="text-center m-4">Register User</h2>
 
-          <form>
+          <form onSubmit={(e) => onSubmit(e)}>
             <div className="mb-3">
-            <div class="input-group">
-              <label htmlFor="Name" className="form-label">Name</label> 
-            </div>
+              <label htmlFor="Name" className="form-label">
+                Name
+              </label>
               <input
                 type={"text"}
                 className="form-control"
                 placeholder="Enter your name"
-                name="name"   
-                value={name} 
-                onChange={(e)=>handleChange(e)}            
+                name="name"
+                value={name}
+                onChange={(e) => onSubmitChange(e)}
               />
             </div>
-                        
             <div className="mb-3">
-            <div class="input-group">
-              <label htmlFor="Username" className="form-label">Username</label>
-            </div>
+              <label htmlFor="Username" className="form-label">
+                Username
+              </label>
               <input
                 type={"text"}
                 className="form-control"
                 placeholder="Enter your username"
                 name="username"
-                value={username} 
-                onChange={(e)=>handleChange(e)} 
-                
+                value={username}
+                onChange={(e) => onSubmitChange(e)}
               />
             </div>
             <div className="mb-3">
-              <div class="input-group">
-              <label htmlFor="Email" className="form-label">E-mail</label>
-              </div>
+              <label htmlFor="Email" className="form-label">
+                E-mail
+              </label>
               <input
                 type={"text"}
                 className="form-control"
                 placeholder="Enter your e-mail address"
                 name="email"
-                value={email} 
-                onChange={(e)=>handleChange(e)} 
-                
+                value={email}
+                onChange={(e) => onSubmitChange(e)}
               />
             </div>
             <button type="submit" className="btn btn-outline-primary">
@@ -77,5 +79,5 @@ export default function AddUsers() {
         </div>
       </div>
     </div>
-  )
+  );
 }
